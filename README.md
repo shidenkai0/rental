@@ -7,7 +7,7 @@ Rental is an API for handling rental services. It allows the user to create, upd
 ## API documentation
 
 A full OpenAPI v3/Swagger specification can be found locally at `api/rental-v1.0.yaml`.
-You can use a tool such as Swagger or Postman to interact with the API locally.
+You can use a tool such as Swagger or Postman to interact with the API when running it locally at http://localhost:9090 or in production at https://rental.mmess.dev (as specified in the API Spec).
 
 ## Developing locally
 
@@ -29,7 +29,7 @@ Proceed with setting up the local database by running:
 
 ```
 docker-compose up -d database
-make migrate
+make seed_db
 ```
 
 Then, you can run the following commands to start the API:
@@ -38,7 +38,7 @@ Then, you can run the following commands to start the API:
 docker-compose up
 ```
 
-The API Server should now be listening on http://localhost:9090
+The API Server should now be listening on http://localhost:9090, the v1 API is available under the path `/v1`.
 
 The default basic auth credentials when running locally are `rental:rental`.
 
