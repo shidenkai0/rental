@@ -2,7 +2,7 @@
 MAKEFLAGS += --silent
 
 COMMIT_SHA=$(shell git rev-parse --short HEAD)
-DOCKER_REGISTRY=registry.digitalocean.com/mmess-dev
+DOCKER_REGISTRY=registry.digitalocean.com/mmess
 IMAGE_NAME=rental
 
 .PHONY: show_version setup migrate seed_db api_v1_gen test deploy build_image push_image do_registry_login all
