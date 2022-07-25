@@ -5,7 +5,7 @@ COMMIT_SHA=$(shell git rev-parse --short HEAD)
 DOCKER_REGISTRY=registry.digitalocean.com/mmess-dev
 IMAGE_NAME=rental
 
-.PHONY: show_version setup migrate api_v1_gen test deploy build_image push_image do_registry_login all
+.PHONY: show_version setup migrate seed_db api_v1_gen test deploy build_image push_image do_registry_login all
 
 
 show_version:
@@ -37,8 +37,12 @@ do_registry_login:
 push_image: do_registry_login
 	docker push ${DOCKER_REGISTRY}/${IMAGE_NAME}:${COMMIT_SHA}
 
+seed_db: migrate
+	cat db/seed/data.sql | docker-compose exec -T database psql "postgres://rental:rental@localhost:5432/rental?sslmode=disable" -
+
 migrate:
 	docker-compose up -d database
+	sleep 2 # wait for database to be ready, TODO: find a way to make this deterministic
 	migrate -path db/migrations/ -database "postgres://rental:rental@localhost:5432/rental?sslmode=disable" up
 
 api_v1_gen:
