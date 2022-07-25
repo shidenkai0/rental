@@ -3,6 +3,7 @@ package main
 import (
 	"crypto/subtle"
 	"fmt"
+	"net/http"
 	"strings"
 
 	"github.com/jmoiron/sqlx"
@@ -59,6 +60,11 @@ func main() {
 		}
 		return false, nil
 	}))
+
+	// Setup healthcheck for Kubernetes probes
+	e.GET("/health", func(c echo.Context) error {
+		return c.String(http.StatusOK, "OK")
+	})
 
 	// Connect to database
 	db := sqlx.MustConnect("postgres", databaseURL)
