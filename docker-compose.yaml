@@ -1,0 +1,44 @@
+version: '3'
+services:
+  database:
+    image: postgres:14
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_PORT: ${DB_PORT}
+    volumes:
+      - database-data:/var/lib/postgresql/data
+    ports:
+      - "${DB_PORT}:${DB_PORT}"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "pg_isready",
+          "-h",
+          "localhost",
+          "-p",
+          "${DB_PORT}"
+        ]
+      interval: 1s
+      timeout: 1s
+      retries: 3
+      start_period: 1s
+    restart: always
+  api:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    environment:
+      - ENV=development
+      - DATABASE_URL=postgres://${DB_USER}:${DB_PASSWORD}@database:${DB_PORT}/${DB_NAME}
+      - PORT=${API_PORT}
+    depends_on:
+      - database
+    ports:
+      - "${API_PORT}:${API_PORT}"
+    restart: always
+
+volumes:
+  database-data:

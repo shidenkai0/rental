@@ -1,0 +1,386 @@
+openapi: '3.0.2'
+info:
+  description: Rental API
+  version: "1.0.0"
+  title: Simple Rental API
+  contact:
+    email: hajimenomomomo@gmail.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+components:
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+  schemas:
+    Customer:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: "Pizza Doe"
+    
+    CreateCustomer:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          example: "Pizza Doe"
+
+    Car:
+      type: object
+      required:
+        - id
+        - make
+        - renter_id
+        - model
+        - year
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        renter_id:
+          type: integer
+          example: 1
+        make:
+          type: string
+          example: Toyota
+        model:
+          type: string
+          example: Yaris
+        year:
+          type: integer
+          example: 2019
+    CreateCar:
+      type: object
+      required:
+        - make
+        - model
+        - year
+      properties:
+        make:
+          type: string
+          example: Toyota
+        model:
+          type: string
+          example: Yaris
+        year:
+          type: integer
+          example: 2019
+    
+    ErrorResponse:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          example: error details
+    
+  requestBodies:
+    CreateCustomer:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateCustomer'
+    CreateCar:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateCar'
+  responses:
+    Unauthorized:
+      description: Invalid credentials
+      headers:
+        WWW-Authenticate:
+          schema:
+            type: string
+            enum:
+              - Basic realm="Restricted"
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+        
+security:
+  - BasicAuth: []
+
+tags:
+  - name: admins
+    description: Operations available to rental admins.
+
+servers:
+  - url: https://rental.mmess.dev/v1
+paths:
+  /customer:
+    post:
+      tags:
+        - customer
+      summary: Create a new customer
+      operationId: createCustomer
+      responses:
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '201':
+          description: Customer created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      requestBody:
+        $ref: '#/components/requestBodies/CreateCustomer'
+  '/customer/{customerId}':
+    get:
+      tags:
+        - admins
+      summary: Find customer by ID
+      description: Returns a single customer
+      operationId: getCustomerById
+      parameters:
+        - name: customerId
+          in: path
+          description: ID of customer to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Customer found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+        '404':
+          description: Customer not found
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    put:
+      tags:
+        - admins
+      summary: Updates a customer
+      operationId: updateCustomer
+      parameters:
+        - name: customerId
+          in: path
+          description: ID of customer that needs to be updated
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Customer updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+        '404':
+          description: Customer not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCustomer'
+    delete:
+      tags:
+        - admins
+      summary: Deletes a customer
+      operationId: deleteCustomer
+      parameters:
+        - name: customerId
+          in: path
+          description: Customer id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Customer deleted
+        '404':
+          description: Customer not found
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /car:
+    post:
+      tags:
+        - car
+      summary: Create a new car
+      operationId: createCar
+      responses:
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '201':
+          description: Car created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Car'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      requestBody:
+        $ref: '#/components/requestBodies/CreateCar'
+  '/car/{carId}':
+    get:
+      tags:
+        - admins
+      summary: Find car by ID
+      description: Returns a single car
+      operationId: getCarById
+      parameters:
+        - name: carId
+          in: path
+          description: ID of car to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Car found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Car'
+        '404':
+          description: Car not found
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    put:
+      tags:
+        - admins
+      summary: Updates a car
+      operationId: updateCar
+      parameters:
+        - name: carId
+          in: path
+          description: ID of car that needs to be updated
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Car updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Car'
+        '404':
+          description: Car not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Car'
+    delete:
+      tags:
+        - admins
+      summary: Deletes a car
+      operationId: deleteCar
+      parameters:
+        - name: carId
+          in: path
+          description: Car id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Car deleted
+        '404':
+          description: Car not found
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  '/car/{carId}/rent':
+    get:
+      tags:
+        - admins
+      summary: Rent a car
+      operationId: rentCar
+      parameters:
+        - name: carId
+          in: path
+          description: ID of the car to rent
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: customerId
+          in: query
+          description: ID of the customer to rent the car to
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Car rented
+        '403':
+          description: Car already rented
+        '404':
+          description: Car not found
+        '400':
+          description: Invalid input or customer does not exist.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
