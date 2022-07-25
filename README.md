@@ -2,6 +2,73 @@
 
 ## Introduction
 
+Rental is an API for handling rental services. It allows the user to create, update, and delete cars, as well as customers. It also allows the user to rent cars to customers.
+
+## API documentation
+
+A full OpenAPI v3/Swagger specification can be found locally at `api/rental-v1.0.yaml`.
+You can use a tool such as Swagger or Postman to interact with the API locally.
+
+## Developing locally
+
+### Prerequisites
+
+Development on this project assumes that you have Docker and docker-compose setup, as well as a functional Go 1.18 or greater development environment, to set these up:
+
+- [Docker and docker-compose](https://docs.docker.com/compose/install/)
+- [Go](https://go.dev/doc/install)
+
+Before starting development on this project, install the recommended development tools by running:
+
+```bash
+make setup
+```
+### Running the API
+
+Proceed with setting up the local database by running:
+
+```
+docker-compose up -d database
+make migrate
+```
+
+Then, you can run the following commands to start the API:
+
+```bash
+docker-compose up
+```
+
+The API Server should now be listening on http://localhost:9090
+
+The default basic auth credentials when running locally are `rental:rental`.
+
+## Upgrading
+### Without breaking changes
+- Start by editing the API Spec at `api/rental-v1.0.yaml`
+- Generate API boilerplate code by running:
+```bash
+make api_v1_gen
+```
+- If you are just changing the logic of an endpoint, simply edit the appropriate method in `pkg/api.Server`
+- If you added some endpoints, implement them on the `pkg/api.Server` type, use the `pkg/api/gen.ServerInterface` interface as a reference for which methods to implement.
+### With breaking changes
+Introducing breaking changes into the API requires creating a new version of the API Spec. This can be done by copying the existing API Spec and modifying it, for instance:
+
+```bash
+cp api/rental-v1.0.yaml api/rental-v2.0.yaml
+```
+Then, add a new command to the Makefile named openapi_v${MAJOR_VERSION}_gen using the `api_v1_gen` command as a reference, and changing the version number where necessary.
+
+All that is left is then to implement a Server for this new version of the API in `pkg/api` using version 1 of the API as a reference.
+
+Do not forget to register the API under a new group in the Echo Server:
+```go
+e.Group("/v2")
+```
+This will allow the new version of the API to be accessible under the `/v2` path.
+
+
+
 ## Database migrations
 
 ### Create a migration
@@ -13,3 +80,10 @@ migrate create -ext sql -dir db/migrations -seq $migration_name
 ```
 
 This should create files called `$migration_name.up.sql` and `$migration_name.down.sql` in the `db/migrations` directory. Fill in the necessary SQL statements to create the tables and columns you need. Do not forget to fill the "down" migration with the SQL statements to drop the tables and columns you created: running the "up" and "down" files sequentially should result in a no-op.
+
+### Run migrations
+#### Locally
+
+```
+make migrate
+```
