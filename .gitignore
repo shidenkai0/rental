@@ -1,2 +1,10 @@
+# VS Code
 .vscode
+
+# Ignore prod Helm values
 values-prod.yaml
+
+# Terraform
+terraform.tfvars
+.terraform
+backend_config.hcl
