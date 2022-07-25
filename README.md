@@ -87,3 +87,11 @@ This should create files called `$migration_name.up.sql` and `$migration_name.do
 ```
 make migrate
 ```
+
+#### In production
+
+Make sure the current kubernetes context is set to the production cluster, then:
+
+```
+make migrate_prod
+```

@@ -46,7 +46,7 @@ migrate:
 	migrate -path db/migrations/ -database "postgres://rental:rental@localhost:5432/rental?sslmode=disable" up
 
 migrate_prod:
-	kubectl run -it --rm --restart=Never --image ${DOCKER_REGISTRY}/${IMAGE_NAME}:${COMMIT_SHA} migration -- /bin/migrate -path /migrations -database "${DATABASE_URL}" up
+	kubectl run --rm --restart=Never --image ${DOCKER_REGISTRY}/${IMAGE_NAME}:${COMMIT_SHA} migration -- /bin/migrate -path /migrations -database "${DATABASE_URL}" up
 
 api_v1_gen:
 	oapi-codegen -package gen api/rental-v1.0.yml > pkg/api/gen/api.gen.go
