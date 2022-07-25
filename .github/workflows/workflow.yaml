@@ -1,0 +1,40 @@
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '**'
+
+jobs:
+
+  build:
+    name: Build, push, and deploy
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Checkout main
+      uses: actions/checkout@v2
+
+    - name: Setup Go
+      uses: actions/setup-go@v3
+      with:
+        go-version: '>=1.18'
+  
+    - name: Run tests
+      run: make test
+    
+    - name: Install doctl
+      uses: digitalocean/action-doctl@v2
+      with:
+        token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+
+    - name: Build and Push image to DigitalOcean Container Registry
+      run: make all
+    
+    - name: Save DigitalOcean kubeconfig with short-lived credentials
+      run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 rental
+
+    - name: Deploy to DigitalOcean rental Kubernetes cluster
+      env:
+        VALUES_PROD_BASE64: ${{ secrets.VALUES_PROD_BASE64 }}
+      run: make deploy
