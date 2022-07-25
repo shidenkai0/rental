@@ -49,7 +49,7 @@ func toAPICustomer(customer rental.Customer) gen.Customer {
 // Create a new car
 // (POST /car)
 func (s *Server) CreateCar(ctx echo.Context) error {
-	createCar := gen.CreateUpdateCar{}
+	createCar := gen.CreateUpdateCarRequest{}
 	if err := ctx.Bind(&createCar); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
@@ -93,7 +93,7 @@ func (s *Server) GetCarById(ctx echo.Context, carId int64) error {
 // Updates a car
 // (PUT /car/{carId})
 func (s *Server) UpdateCar(ctx echo.Context, carId int64) error {
-	CreateCar := gen.CreateUpdateCar{}
+	CreateCar := gen.CreateUpdateCarRequest{}
 	if err := ctx.Bind(&CreateCar); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
@@ -148,7 +148,7 @@ func (s *Server) RentCar(ctx echo.Context, carId int64, params gen.RentCarParams
 // Create a new customer
 // (POST /customer)
 func (s *Server) CreateCustomer(ctx echo.Context) error {
-	createCustomer := gen.CreateUpdateCustomer{}
+	createCustomer := gen.CreateUpdateCustomerRequest{}
 	if err := ctx.Bind(&createCustomer); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
@@ -192,7 +192,7 @@ func (s *Server) GetCustomerById(ctx echo.Context, customerId int64) error {
 // Updates a customer
 // (PUT /customer/{customerId})
 func (s *Server) UpdateCustomer(ctx echo.Context, customerId int64) error {
-	CreateCustomer := gen.CreateUpdateCustomer{}
+	CreateCustomer := gen.CreateUpdateCustomerRequest{}
 	if err := ctx.Bind(&CreateCustomer); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}

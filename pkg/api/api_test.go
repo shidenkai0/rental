@@ -20,7 +20,7 @@ func TestServerCreateCar(t *testing.T) {
 	e := echo.New()
 	s := &Server{CarCRUDService: mock.NewMockCarCRUDService()}
 
-	createCar := gen.CreateUpdateCar{Make: "Toyota", Model: "Corolla", Year: 2018}
+	createCar := gen.CreateUpdateCarRequest{Make: "Toyota", Model: "Corolla", Year: 2018}
 
 	createCarJSON, _ := json.Marshal(createCar)
 
@@ -137,7 +137,7 @@ func TestServerUpdateCar(t *testing.T) {
 		t.Errorf("got error %v, want nil", err)
 	}
 
-	updateCar := gen.CreateUpdateCar{Make: "Honda", Model: "Civic", Year: 2017}
+	updateCar := gen.CreateUpdateCarRequest{Make: "Honda", Model: "Civic", Year: 2017}
 	updateCarJSON, _ := json.Marshal(updateCar)
 
 	path := fmt.Sprintf("/car/%d", testCarID)
@@ -302,7 +302,7 @@ func TestServerCreateCustomer(t *testing.T) {
 	e := echo.New()
 	s := &Server{CustomerCRUDService: mock.NewMockCustomerCRUDService()}
 
-	createCustomer := gen.CreateUpdateCustomer{Name: "John Doe"}
+	createCustomer := gen.CreateUpdateCustomerRequest{Name: "John Doe"}
 	createCustomerJSON, _ := json.Marshal(createCustomer)
 
 	req := httptest.NewRequest(http.MethodPost, "/customer", bytes.NewBuffer(createCustomerJSON))
@@ -414,7 +414,7 @@ func TestServerUpdateCustomer(t *testing.T) {
 		t.Errorf("got error %v, want nil", err)
 	}
 
-	updateCustomer := gen.CreateUpdateCustomer{Name: "Jane Doe"}
+	updateCustomer := gen.CreateUpdateCustomerRequest{Name: "Jane Doe"}
 	updateCustomerJSON, _ := json.Marshal(updateCustomer)
 
 	path := fmt.Sprintf("/customer/%d", testCustomerID)

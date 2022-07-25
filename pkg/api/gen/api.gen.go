@@ -31,15 +31,15 @@ type Car struct {
 	Year     int    `json:"year"`
 }
 
-// CreateUpdateCar defines model for CreateUpdateCar.
-type CreateUpdateCar struct {
+// CreateUpdateCarRequest defines model for CreateUpdateCarRequest.
+type CreateUpdateCarRequest struct {
 	Make  string `json:"make"`
 	Model string `json:"model"`
 	Year  int    `json:"year"`
 }
 
-// CreateUpdateCustomer defines model for CreateUpdateCustomer.
-type CreateUpdateCustomer struct {
+// CreateUpdateCustomerRequest defines model for CreateUpdateCustomerRequest.
+type CreateUpdateCustomerRequest struct {
 	Name string `json:"name"`
 }
 
@@ -70,16 +70,16 @@ type RentCarParams struct {
 }
 
 // UpdateCustomerJSONBody defines parameters for UpdateCustomer.
-type UpdateCustomerJSONBody = CreateUpdateCustomer
+type UpdateCustomerJSONBody = CreateUpdateCustomerRequest
 
 // CreateCarJSONRequestBody defines body for CreateCar for application/json ContentType.
-type CreateCarJSONRequestBody = CreateUpdateCar
+type CreateCarJSONRequestBody = CreateUpdateCarRequest
 
 // UpdateCarJSONRequestBody defines body for UpdateCar for application/json ContentType.
 type UpdateCarJSONRequestBody = UpdateCarJSONBody
 
 // CreateCustomerJSONRequestBody defines body for CreateCustomer for application/json ContentType.
-type CreateCustomerJSONRequestBody = CreateUpdateCustomer
+type CreateCustomerJSONRequestBody = CreateUpdateCustomerRequest
 
 // UpdateCustomerJSONRequestBody defines body for UpdateCustomer for application/json ContentType.
 type UpdateCustomerJSONRequestBody = UpdateCustomerJSONBody

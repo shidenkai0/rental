@@ -28,7 +28,7 @@ components:
           type: string
           example: "Pizza Doe"
     
-    CreateCustomer:
+    CreateUpdateCustomerRequest:
       type: object
       required:
         - name
@@ -62,7 +62,7 @@ components:
         year:
           type: integer
           example: 2019
-    CreateCar:
+    CreateUpdateCarRequest:
       type: object
       required:
         - make
@@ -89,16 +89,16 @@ components:
           example: error details
     
   requestBodies:
-    CreateCustomer:
+    CreateUpdateCustomerRequest:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/CreateCustomer'
-    CreateCar:
+            $ref: '#/components/schemas/CreateUpdateCustomerRequest'
+    CreateUpdateCarRequest:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/CreateCar'
+            $ref: '#/components/schemas/CreateUpdateCarRequest'
   responses:
     Unauthorized:
       description: Invalid credentials
@@ -127,6 +127,7 @@ tags:
     description: Operations available to rental admins.
 
 servers:
+  - url: http://localhost:9090/v1
   - url: https://rental.mmess.dev/v1
 paths:
   /customer:
@@ -153,7 +154,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
       requestBody:
-        $ref: '#/components/requestBodies/CreateCustomer'
+        $ref: '#/components/requestBodies/CreateUpdateCustomerRequest'
   '/customer/{customerId}':
     get:
       tags:
@@ -216,7 +217,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateCustomer'
+              $ref: '#/components/schemas/CreateUpdateCustomerRequest'
     delete:
       tags:
         - admins
@@ -264,7 +265,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
       requestBody:
-        $ref: '#/components/requestBodies/CreateCar'
+        $ref: '#/components/requestBodies/CreateUpdateCarRequest'
   '/car/{carId}':
     get:
       tags:

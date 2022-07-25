@@ -11,12 +11,12 @@ IMAGE_NAME=rental
 show_version:
 	@echo ${COMMIT_SHA}
 
-setup:
+setup: # setup local development environment
 	go install github.com/rakyll/gotest@latest
 	go install github.com/deepmap/oapi-codegen/cmd/oapi-codegen@latest
 	go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
 
-test:
+test: # run tests
 	docker-compose up -d database
 	sleep 2 # wait for database to be ready, TODO: find a way to make this deterministic
 	gotest -v ./...

@@ -30,11 +30,17 @@ func setupTestDatabase() {
 	if err != nil {
 		panic(err)
 	}
-	if err := m.Up(); err != nil {
+	err = m.Up()
+	if err == migrate.ErrNoChange {
+		return
+	}
+	if err != nil {
 		panic(err)
 	}
 }
 
+// teardownTestDatabase tears down the test database. It should be deferred after setupTestDatabase in
+// test cases as it allows to cleanly reset the database state in between tests to provide isolation.
 func teardownTestDatabase() {
 	db, err := sql.Open("postgres", testDatabaseURL)
 	if err != nil {

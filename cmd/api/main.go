@@ -29,17 +29,17 @@ func main() {
 
 	port := viper.GetString("port")
 	databaseURL := viper.GetString("database_url")
-	databaseMaxPoolSize := viper.GetInt("database_max_pool_size")
-	databaseMaxIdleConnections := viper.GetInt("database_max_idle_connections")
-	basicAuthUsername := viper.GetString("basic_auth_username")
+	databaseMaxOpenConns := viper.GetInt("database_max_open_conns")
+	databaseMaxIdleConns := viper.GetInt("database_max_idle_conns")
+	basicAuthUsername := viper.GetString("basic_auth_user")
 	basicAuthPassword := viper.GetString("basic_auth_password")
 
 	// Log config
 	fmt.Printf("port: %s\n", port)
 	fmt.Printf("database_url: %s\n", databaseURL)
-	fmt.Printf("database_max_pool_size: %d\n", databaseMaxPoolSize)
-	fmt.Printf("database_max_idle_connections: %d\n", databaseMaxIdleConnections)
-	fmt.Printf("basic_auth_username: %s\n", basicAuthUsername)
+	fmt.Printf("database_max_open_conns: %d\n", databaseMaxOpenConns)
+	fmt.Printf("database_max_idle_conns: %d\n", databaseMaxIdleConns)
+	fmt.Printf("basic_auth_user: %s\n", basicAuthUsername)
 	fmt.Printf("basic_auth_password: %s\n", basicAuthPassword)
 
 	// Setup echo middleware
@@ -62,8 +62,8 @@ func main() {
 
 	// Connect to database
 	db := sqlx.MustConnect("postgres", databaseURL)
-	db.SetMaxOpenConns(databaseMaxPoolSize)
-	db.SetMaxIdleConns(databaseMaxIdleConnections)
+	db.SetMaxOpenConns(databaseMaxOpenConns)
+	db.SetMaxIdleConns(databaseMaxIdleConns)
 	defer db.Close()
 
 	// Setup API server
