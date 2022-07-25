@@ -5,7 +5,7 @@ COMMIT_SHA=$(shell git rev-parse --short HEAD)
 DOCKER_REGISTRY=registry.digitalocean.com/mmess-dev
 IMAGE_NAME=rental
 
-.PHONY: show_version setup test deploy build_image push_image do_registry_login all
+.PHONY: show_version setup migrate api_v1_gen test deploy build_image push_image do_registry_login all
 
 
 show_version:
@@ -36,5 +36,12 @@ do_registry_login:
 
 push_image: do_registry_login
 	docker push ${DOCKER_REGISTRY}/${IMAGE_NAME}:${COMMIT_SHA}
+
+migrate:
+	docker-compose up -d database
+	migrate -path db/migrations/ -database "postgres://rental:rental@localhost:5432/rental?sslmode=disable" up
+
+api_v1_gen:
+	oapi-codegen -package gen api/rental-v1.0.yml > pkg/api/gen/api.gen.go
 
 all: build_image push_image
