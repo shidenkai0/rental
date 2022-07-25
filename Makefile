@@ -13,6 +13,8 @@ show_version:
 
 setup:
 	go install github.com/rakyll/gotest@latest
+	go install github.com/deepmap/oapi-codegen/cmd/oapi-codegen@latest
+	go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
 
 test:
 	docker-compose up -d database
