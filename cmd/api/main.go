@@ -9,6 +9,7 @@ import (
 	"github.com/jmoiron/sqlx"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	"github.com/labstack/gommon/log"
 	_ "github.com/lib/pq"
 	"github.com/shidenkai0/rental/pkg/api"
 	"github.com/shidenkai0/rental/pkg/api/gen"
@@ -24,6 +25,7 @@ func main() {
 	viper.SetDefault("database_max_idle_conns", "2")
 	viper.SetDefault("basic_auth_user", "rental")
 	viper.SetDefault("basic_auth_password", "rental")
+	viper.SetDefault("debug", false)
 
 	// Read config from env
 	viper.SetEnvKeyReplacer(strings.NewReplacer("-", "_"))
@@ -35,14 +37,19 @@ func main() {
 	databaseMaxIdleConns := viper.GetInt("database_max_idle_conns")
 	basicAuthUsername := viper.GetString("basic_auth_user")
 	basicAuthPassword := viper.GetString("basic_auth_password")
+	debug := viper.GetBool("debug")
+
+	if debug {
+		log.SetLevel(log.DEBUG)
+	}
 
 	// Log config
-	fmt.Printf("port: %s\n", port)
-	fmt.Printf("database_url: %s\n", databaseURL)
-	fmt.Printf("database_max_open_conns: %d\n", databaseMaxOpenConns)
-	fmt.Printf("database_max_idle_conns: %d\n", databaseMaxIdleConns)
-	fmt.Printf("basic_auth_user: %s\n", basicAuthUsername)
-	fmt.Printf("basic_auth_password: %s\n", basicAuthPassword)
+	log.Debugf("port: %s\n", port)
+	log.Debugf("database_url: %s\n", databaseURL)
+	log.Debugf("database_max_open_conns: %d\n", databaseMaxOpenConns)
+	log.Debugf("database_max_idle_conns: %d\n", databaseMaxIdleConns)
+	log.Debugf("basic_auth_user: %s\n", basicAuthUsername)
+	log.Debugf("basic_auth_password: %s\n", basicAuthPassword)
 
 	// Setup echo middleware
 
