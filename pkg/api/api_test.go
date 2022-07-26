@@ -211,13 +211,12 @@ func TestServerRentCar(t *testing.T) {
 			t.Errorf("got %d status code, want %d", resp.Code, http.StatusNoContent)
 		}
 
-		got, err := s.CarCRUDService.Get(testCarID)
+		rentedCar, err := s.CarCRUDService.Get(testCarID)
 		if err != nil {
 			t.Errorf("got error %v, want nil", err)
 		}
-		want := rental.Car{ID: testCarID, Make: car.Make, Model: car.Model, Year: car.Year, CustomerID: null.IntFrom(int64(testCustomerID))}
-		if got != want {
-			t.Errorf("got %v, want %v", got, want)
+		if rentedCar.RenterID() == 0 {
+			t.Errorf("car %d not rented to customer %d", testCarID, testCustomerID)
 		}
 	})
 	t.Run("rent a rented car", func(t *testing.T) {
