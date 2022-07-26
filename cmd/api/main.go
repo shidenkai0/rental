@@ -20,9 +20,9 @@ func main() {
 	// Set default config
 	viper.SetDefault("port", "8080")
 	viper.SetDefault("database_url", "postgres://rental:rental@localhost:5432/rental")
-	viper.SetDefault("database_max_pool_size", "5")
-	viper.SetDefault("database_max_idle_connections", "2")
-	viper.SetDefault("basic_auth_username", "rental")
+	viper.SetDefault("database_max_open_conns", "5")
+	viper.SetDefault("database_max_idle_conns", "2")
+	viper.SetDefault("basic_auth_user", "rental")
 	viper.SetDefault("basic_auth_password", "rental")
 
 	// Read config from env
