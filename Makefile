@@ -39,6 +39,7 @@ test: # run tests
 deploy: # Deploy the app through Helm
 	DOCKER_REGISTRY=${DOCKER_REGISTRY} \
 	COMMIT_SHA=${COMMIT_SHA} \
+	IMAGE_NAME=${IMAGE_NAME} \
 	./deployment/bin/deploy.sh
 
 build_image:

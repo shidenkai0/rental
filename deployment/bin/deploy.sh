@@ -11,11 +11,11 @@ if [ -n "$CI" ]; then
     fi
     echo "${VALUES_PROD_BASE64}" | base64 --decode > /tmp/values-prod.yaml
 	helm upgrade api --install -f /tmp/values-prod.yaml \
-	 --set image.tag="${COMMIT_SHA}" --set image.repository="${DOCKER_REGISTRY}/api" \
+	 --set image.tag="${COMMIT_SHA}" --set image.repository="${DOCKER_REGISTRY}/${IMAGE_NAME}" \
 	 . || true # Continue to make sure we remove values-prod.yaml even if the helm command fails.
     rm /tmp/values-prod.yaml
 else
 	helm upgrade api --install -f values-prod.yaml \
-	 --set image.tag="${COMMIT_SHA}" --set image.repository="${DOCKER_REGISTRY}/api" \
+	 --set image.tag="${COMMIT_SHA}" --set image.repository="${DOCKER_REGISTRY}/${IMAGE_NAME}" \
 	 .
 fi

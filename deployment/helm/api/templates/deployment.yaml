@@ -17,7 +17,7 @@ spec:
       {{- end }}
       labels:
         {{- include "api.selectorLabels" . | nindent 8 }}
-        tags.datadoghq.com/env: {{ .Values.global.env | quote }}
+        tags.datadoghq.com/env: {{ .Values.env | quote }}
         tags.datadoghq.com/service: {{ include "api.fullname" . }}
         tags.datadoghq.com/version: {{ .Values.image.tag | quote }}
     spec:
@@ -38,18 +38,18 @@ spec:
             - name: DATABASE_URL
               value: {{ .Values.database.url }}
             - name: DATABASE_MAX_OPEN_CONNS
-              value: {{ .Values.database.maxOpenConns }}
+              value: {{ .Values.database.maxOpenConns | quote }}
             - name: DATABASE_MAX_IDLE_CONNS
-              value: {{ .Values.database.maxIdleConns }}
+              value: {{ .Values.database.maxIdleConns | quote }}
             - name: BASIC_AUTH_USER
-              value: {{ .Values.basicAuth.username }}
+              value: {{ .Values.basicAuth.user }}
             - name: BASIC_AUTH_PASSWORD
               value: {{ .Values.basicAuth.password }}
             - name: PORT
-              value:  "80"
+              value:  "8080"
           ports:
             - name: http
-              containerPort: 80
+              containerPort: 8080
               protocol: TCP
           livenessProbe:
             httpGet:
