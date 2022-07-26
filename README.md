@@ -2,12 +2,22 @@
 
 ## Introduction
 
-Rental is an API for handling rental services. It allows the user to create, update, and delete cars, as well as customers. It also allows the user to rent cars to customers.
+Rental is an API for handling rental services. It allows the user to create, update, and delete cars, as well as customers. It also allows the user to rent and return cars.
 
 ## API documentation
 
 A full OpenAPI v3/Swagger specification can be found locally at `api/rental-v1.0.yaml`.
 You can use a tool such as Swagger or Postman to interact with the API when running it locally at http://localhost:9090 or in production at https://rental.mmess.dev (as specified in the API Spec).
+
+## Configuration
+The following environment variables are available for configuration:
+
+* `PORT`: The port to run the API on. Defaults to `9090`.
+* `DATABASE_URL`: The URL of the database to use. Defaults to `postgres://rental:rental@localhost:5432/rental`.
+* `DATABASE_MAX_OPEN_CONNS`: The maximum number of open connections to the database. Defaults to 5.
+* `DATABASE_MAX_IDLE_CONNS`: The maximum number of idle connections to the database. Defaults to 2.
+* `BASIC_AUTH_USER`: The username to use for basic authentication. Defaults to `rental`.
+* `BASIC_AUTH_PASSWORD`: The password to use for basic authentication. Defaults to `rental`.
 
 ## Developing locally
 
@@ -42,8 +52,16 @@ The API Server should now be listening on http://localhost:9090, the v1 API is a
 
 The default basic auth credentials when running locally are `rental:rental`.
 
-## Upgrading
-### Without breaking changes
+### Running the tests
+To run all the unit tests, run:
+
+```bash
+make test
+```
+
+## Adding a new feature
+
+### Without API breaking changes
 - Start by editing the API Spec at `api/rental-v1.0.yaml`
 - Generate API boilerplate code by running:
 ```bash
@@ -51,7 +69,7 @@ make api_v1_gen
 ```
 - If you are just changing the logic of an endpoint, simply edit the appropriate method in `pkg/api.Server`
 - If you added some endpoints, implement them on the `pkg/api.Server` type, use the `pkg/api/gen.ServerInterface` interface as a reference for which methods to implement.
-### With breaking changes
+### With API breaking changes
 Introducing breaking changes into the API requires creating a new version of the API Spec. This can be done by copying the existing API Spec and modifying it, for instance:
 
 ```bash
@@ -68,6 +86,13 @@ e.Group("/v2")
 This will allow the new version of the API to be accessible under the `/v2` path.
 
 
+## Deploying to production
+
+Deploying to production is done automatically by the CI, however, to deploy locally, and assuming you have access to the production environment, you can run:
+
+```bash
+make deploy
+```
 
 ## Database migrations
 
