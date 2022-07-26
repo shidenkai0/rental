@@ -17,6 +17,7 @@ import (
 
 func TestServerCreateCar(t *testing.T) {
 	// Setup
+
 	e := echo.New()
 	s := &Server{CarCRUDService: mock.NewMockCarCRUDService()}
 
@@ -223,6 +224,7 @@ func TestServerRentCar(t *testing.T) {
 	})
 	t.Run("rent a rented car", func(t *testing.T) {
 		// Setup
+
 		e := echo.New()
 		carCRUDService := mock.NewMockCarCRUDService()
 		customerCRUDService := mock.NewMockCustomerCRUDService()
@@ -292,6 +294,89 @@ func TestServerRentCar(t *testing.T) {
 		he, _ := err.(*echo.HTTPError)
 
 		got, want := he.Code, http.StatusBadRequest
+		if got != want {
+			t.Errorf("got %d status code, want %d", got, want)
+		}
+	})
+}
+
+func TestServerReturnCar(t *testing.T) {
+	t.Run("return a rented car", func(t *testing.T) {
+		// Setup
+
+		e := echo.New()
+		carCRUDService := mock.NewMockCarCRUDService()
+		customerCRUDService := mock.NewMockCustomerCRUDService()
+		s := &Server{CarCRUDService: carCRUDService, CustomerCRUDService: customerCRUDService}
+
+		testCarID := 1
+		testCustomerID := 1
+
+		car := rental.Car{ID: testCarID, Make: "Toyota", Model: "Corolla", Year: 2015, CustomerID: null.IntFrom(int64(testCustomerID))}
+		if _, err := s.CarCRUDService.Create(car); err != nil {
+			t.Errorf("got error %v, want nil", err)
+		}
+		customer := rental.Customer{ID: testCustomerID, Name: "John Doe"}
+		if _, err := s.CustomerCRUDService.Create(customer); err != nil {
+			t.Errorf("got error %v, want nil", err)
+		}
+
+		path := fmt.Sprintf("/car/%d/return", testCarID)
+		req := httptest.NewRequest(http.MethodGet, path, nil)
+		req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+		resp := httptest.NewRecorder()
+		ctx := e.NewContext(req, resp)
+		ctx.SetPath(path)
+
+		// Test
+
+		err := s.ReturnCar(ctx, int64(testCarID))
+
+		if err != nil {
+			t.Errorf("got error %v, want nil", err)
+		}
+
+		rentedCar, err := s.CarCRUDService.Get(testCarID)
+		if err != nil {
+			t.Errorf("got error %v, want nil", err)
+		}
+		if rentedCar.Rented() {
+			t.Errorf("car should not be rented")
+		}
+	})
+	t.Run("return a car that is not rented", func(t *testing.T) {
+		// Setup
+
+		e := echo.New()
+		carCRUDService := mock.NewMockCarCRUDService()
+		customerCRUDService := mock.NewMockCustomerCRUDService()
+		s := &Server{CarCRUDService: carCRUDService, CustomerCRUDService: customerCRUDService}
+
+		testCarID := 1
+
+		car := rental.Car{ID: testCarID, Make: "Toyota", Model: "Corolla", Year: 2015}
+		if _, err := s.CarCRUDService.Create(car); err != nil {
+			t.Errorf("got error %v, want nil", err)
+		}
+
+		path := fmt.Sprintf("/car/%d/return", testCarID)
+		req := httptest.NewRequest(http.MethodGet, path, nil)
+		req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+		resp := httptest.NewRecorder()
+		ctx := e.NewContext(req, resp)
+		ctx.SetPath(path)
+
+		// Test
+
+		err := s.ReturnCar(ctx, int64(testCarID))
+
+		if err == nil {
+			t.Errorf("got nil, want error")
+		}
+
+		he, _ := err.(*echo.HTTPError)
+
+		got, want := he.Code, http.StatusForbidden
 		if got != want {
 			t.Errorf("got %d status code, want %d", got, want)
 		}
@@ -405,6 +490,7 @@ func TestServerGetCustomerById(t *testing.T) {
 
 func TestServerUpdateCustomer(t *testing.T) {
 	// Setup
+
 	e := echo.New()
 	s := &Server{CustomerCRUDService: mock.NewMockCustomerCRUDService()}
 

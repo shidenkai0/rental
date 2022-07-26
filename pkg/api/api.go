@@ -161,6 +161,28 @@ func (s *Server) RentCar(ctx echo.Context, carId int64, params gen.RentCarParams
 	return ctx.NoContent(http.StatusNoContent)
 }
 
+// Return a car
+// (GET /car/{carId}/return)
+func (s *Server) ReturnCar(ctx echo.Context, carId int64) error {
+	car, err := s.CarCRUDService.Get(int(carId))
+	if err == rental.ErrCarNotFound {
+		return echo.NewHTTPError(http.StatusNotFound, err.Error())
+	}
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+	err = car.Return()
+	if err == rental.ErrCarNotRented {
+		return echo.NewHTTPError(http.StatusForbidden, err.Error())
+	}
+
+	err = s.CarCRUDService.Update(car)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+	return ctx.NoContent(http.StatusNoContent)
+}
+
 // Create a new customer
 // (POST /customer)
 func (s *Server) CreateCustomer(ctx echo.Context) error {
