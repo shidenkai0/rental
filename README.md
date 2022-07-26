@@ -89,9 +89,18 @@ make migrate
 ```
 
 #### In production
+Migrations are run automatically by the CI for now, however if you still want to run them manually, you can still do so by following the steps below:
 
-Make sure the current kubernetes context is set to the production cluster, then:
+
+- Make sure the current kubernetes context is set to the production cluster
+- Run the following command:
 
 ```
 make migrate_prod
+```
+
+If you wish to use more advanced [migrate](https://github.com/golang-migrate/migrate/tree/master/cmd/migrate) commands, for instance to set the database to a specific revision, you can use the following command, customizing it yo your needs:
+
+```
+kubectl run migration -it --restart=Never --image ${DOCKER_REGISTRY}/${MIGRATION_IMAGE_NAME}:${COMMIT_SHA} --rm -- -database "${DATABASE_URL}" $YOUR_CUSTOM_FLAGS_AND_ARGUMENTS
 ```
