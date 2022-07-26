@@ -47,20 +47,6 @@ func main() {
 	// Setup echo middleware
 
 	e := echo.New()
-	e.Use(middleware.Logger())
-	e.Use(middleware.Recover())
-	e.Use(middleware.CORS())
-	e.Use(middleware.Gzip())
-	e.Use(middleware.Secure())
-	e.Use(middleware.BodyLimit("1M"))
-	e.Use(middleware.BasicAuth(func(username, password string, c echo.Context) (bool, error) {
-		// Use constant time comparison to prevent timing attacks
-		if subtle.ConstantTimeCompare([]byte(username), []byte(basicAuthUsername)) == 1 &&
-			subtle.ConstantTimeCompare([]byte(password), []byte(basicAuthPassword)) == 1 {
-			return true, nil
-		}
-		return false, nil
-	}))
 
 	// Setup healthcheck for Kubernetes probes
 	e.GET("/health", func(c echo.Context) error {
@@ -78,7 +64,22 @@ func main() {
 	customerCRUDService := database.NewDatabaseCustomerCRUDService(db)
 	server := api.NewServer(carCRUDService, customerCRUDService)
 
+	// Setup API middleware
 	v1APIGroup := e.Group("/v1")
+	v1APIGroup.Use(middleware.Logger())
+	v1APIGroup.Use(middleware.Recover())
+	v1APIGroup.Use(middleware.CORS())
+	v1APIGroup.Use(middleware.Gzip())
+	v1APIGroup.Use(middleware.Secure())
+	v1APIGroup.Use(middleware.BodyLimit("1M"))
+	v1APIGroup.Use(middleware.BasicAuth(func(username, password string, c echo.Context) (bool, error) {
+		// Use constant time comparison to prevent timing attacks
+		if subtle.ConstantTimeCompare([]byte(username), []byte(basicAuthUsername)) == 1 &&
+			subtle.ConstantTimeCompare([]byte(password), []byte(basicAuthPassword)) == 1 {
+			return true, nil
+		}
+		return false, nil
+	}))
 
 	gen.RegisterHandlers(v1APIGroup, server)
 
