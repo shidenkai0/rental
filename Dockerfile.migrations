@@ -1,12 +1,18 @@
 FROM ubuntu:22.04 as build
 
 ENV MIGRATE_RELEASE="https://github.com/golang-migrate/migrate/releases/download/v4.15.2/migrate.linux-amd64.tar.gz"
+ENV MIGRATE_SHA256="b8e0a37b3d418a0dd418ff23aaa6866a060fffcec1b155a0b9c523588ff0a607"
 
 # Install curl
 RUN apt-get update && apt-get install -y curl
 
 RUN mkdir /migrate
 RUN curl -L $MIGRATE_RELEASE -o /migrate/migrate.tar.gz
+
+# Check package checksum, important to prevent supply-chain attacks
+RUN echo "$MIGRATE_SHA256 /migrate/migrate.tar.gz" | sha256sum -c -
+
+
 RUN tar -xzf /migrate/migrate.tar.gz -C /migrate
 
 FROM debian:bullseye-slim
