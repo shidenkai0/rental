@@ -7,7 +7,7 @@ import (
 	"github.com/shidenkai0/rental/pkg/rental"
 )
 
-func TestMockCarCRUDServiceGet(t *testing.T) {
+func TestMockCarCRUDService_Get(t *testing.T) {
 	t.Run("get car", func(t *testing.T) {
 		testCarID := 1
 		car := rental.Car{ID: testCarID, Make: "Toyota", Model: "Corolla", Year: 2015}
@@ -29,7 +29,7 @@ func TestMockCarCRUDServiceGet(t *testing.T) {
 	})
 }
 
-func TestMockCarCRUDServiceCreate(t *testing.T) {
+func TestMockCarCRUDService_Create(t *testing.T) {
 	testCarID := 1
 	t.Run("create car", func(t *testing.T) {
 		car := rental.Car{ID: testCarID, Make: "Toyota", Model: "Corolla", Year: 2015}
@@ -60,7 +60,7 @@ func TestMockCarCRUDServiceCreate(t *testing.T) {
 	})
 }
 
-func TestMockCarCRUDServiceUpdate(t *testing.T) {
+func TestMockCarCRUDService_Update(t *testing.T) {
 	testCarID := 1
 	car := rental.Car{ID: testCarID, Make: "Toyota", Model: "Corolla", Year: 2015}
 	mockCarCRUDService := NewMockCarCRUDService()
@@ -82,7 +82,7 @@ func TestMockCarCRUDServiceUpdate(t *testing.T) {
 	}
 }
 
-func TestMockCarCRUDServiceDelete(t *testing.T) {
+func TestMockCarCRUDService_Delete(t *testing.T) {
 	testCarID := 1
 	car := rental.Car{ID: testCarID, Make: "Toyota", Model: "Corolla", Year: 2015}
 	mockCarCRUDService := NewMockCarCRUDService()

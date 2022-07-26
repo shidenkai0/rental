@@ -7,7 +7,7 @@ import (
 	"github.com/shidenkai0/rental/pkg/rental"
 )
 
-func TestCustomerCRUDServiceGet(t *testing.T) {
+func TestMockCustomerCRUDService_Get(t *testing.T) {
 	t.Run("get customer", func(t *testing.T) {
 		testCustomerID := 1
 		customer := rental.Customer{ID: testCustomerID, Name: "John Doe"}
@@ -31,7 +31,7 @@ func TestCustomerCRUDServiceGet(t *testing.T) {
 	})
 }
 
-func TestCustomerCRUDServiceCreate(t *testing.T) {
+func TestMockCustomerCRUDService_Create(t *testing.T) {
 	testCustomerID := 1
 	t.Run("create customer", func(t *testing.T) {
 		customer := rental.Customer{ID: testCustomerID, Name: "John Doe"}
@@ -62,7 +62,7 @@ func TestCustomerCRUDServiceCreate(t *testing.T) {
 	})
 }
 
-func TestCustomerCRUDServiceUpdate(t *testing.T) {
+func TestMockCustomerCRUDService_Update(t *testing.T) {
 
 	testCustomerID := 1
 	customer := rental.Customer{ID: testCustomerID, Name: "John Doe"}
@@ -85,7 +85,7 @@ func TestCustomerCRUDServiceUpdate(t *testing.T) {
 
 }
 
-func TestCustomerCRUDServiceDelete(t *testing.T) {
+func TestMockCustomerCRUDService_Delete(t *testing.T) {
 	testCustomerID := 1
 	customer := rental.Customer{ID: testCustomerID, Name: "John Doe"}
 	mockCustomerCRUDService := NewMockCustomerCRUDService()

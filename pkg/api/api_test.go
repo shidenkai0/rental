@@ -15,7 +15,7 @@ import (
 	"gopkg.in/guregu/null.v4"
 )
 
-func TestServerCreateCar(t *testing.T) {
+func TestServer_CreateCar(t *testing.T) {
 	// Setup
 
 	e := echo.New()
@@ -51,7 +51,7 @@ func TestServerCreateCar(t *testing.T) {
 	}
 }
 
-func TestServerDeleteCar(t *testing.T) {
+func TestServer_DeleteCar(t *testing.T) {
 	// Setup
 
 	e := echo.New()
@@ -87,7 +87,7 @@ func TestServerDeleteCar(t *testing.T) {
 	}
 }
 
-func TestServerGetCarById(t *testing.T) {
+func TestServer_GetCarById(t *testing.T) {
 	// Setup
 
 	e := echo.New()
@@ -125,7 +125,7 @@ func TestServerGetCarById(t *testing.T) {
 	}
 }
 
-func TestServerUpdateCar(t *testing.T) {
+func TestServer_UpdateCar(t *testing.T) {
 	// Setup
 
 	e := echo.New()
@@ -176,7 +176,7 @@ func TestServerUpdateCar(t *testing.T) {
 	}
 }
 
-func TestServerRentCar(t *testing.T) {
+func TestServer_RentCar(t *testing.T) {
 	t.Run("rent an available car", func(t *testing.T) {
 		// Setup
 
@@ -300,7 +300,7 @@ func TestServerRentCar(t *testing.T) {
 	})
 }
 
-func TestServerReturnCar(t *testing.T) {
+func TestServer_ReturnCar(t *testing.T) {
 	t.Run("return a rented car", func(t *testing.T) {
 		// Setup
 
@@ -383,7 +383,7 @@ func TestServerReturnCar(t *testing.T) {
 	})
 }
 
-func TestServerCreateCustomer(t *testing.T) {
+func TestServer_CreateCustomer(t *testing.T) {
 	// Setup
 	e := echo.New()
 	s := &Server{CustomerCRUDService: mock.NewMockCustomerCRUDService()}
@@ -416,7 +416,7 @@ func TestServerCreateCustomer(t *testing.T) {
 	}
 }
 
-func TestServerDeleteCustomer(t *testing.T) {
+func TestServer_DeleteCustomer(t *testing.T) {
 	// Setup
 
 	e := echo.New()
@@ -451,7 +451,7 @@ func TestServerDeleteCustomer(t *testing.T) {
 	}
 }
 
-func TestServerGetCustomerById(t *testing.T) {
+func TestServer_GetCustomerById(t *testing.T) {
 	// Setup
 	e := echo.New()
 	s := &Server{CustomerCRUDService: mock.NewMockCustomerCRUDService()}
@@ -488,7 +488,7 @@ func TestServerGetCustomerById(t *testing.T) {
 	}
 }
 
-func TestServerUpdateCustomer(t *testing.T) {
+func TestServer_UpdateCustomer(t *testing.T) {
 	// Setup
 
 	e := echo.New()

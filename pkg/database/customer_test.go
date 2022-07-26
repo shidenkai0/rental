@@ -8,7 +8,7 @@ import (
 	"github.com/shidenkai0/rental/pkg/rental"
 )
 
-func TestDatabaseCustomerCRUDServiceGet(t *testing.T) {
+func TestDatabaseCustomerCRUD_ServiceGet(t *testing.T) {
 	setupTestDatabase()
 	defer teardownTestDatabase()
 	db := sqlx.MustConnect("postgres", testDatabaseURL)
@@ -36,7 +36,7 @@ func TestDatabaseCustomerCRUDServiceGet(t *testing.T) {
 	})
 }
 
-func TestDatabaseCustomerCRUDServiceCreate(t *testing.T) {
+func TestDatabaseCustomerCRUD_ServiceCreate(t *testing.T) {
 	setupTestDatabase()
 	defer teardownTestDatabase()
 
@@ -57,7 +57,7 @@ func TestDatabaseCustomerCRUDServiceCreate(t *testing.T) {
 	}
 }
 
-func TestDatabaseCustomerCRUDServiceUpdate(t *testing.T) {
+func TestDatabaseCustomerCRUD_ServiceUpdate(t *testing.T) {
 	setupTestDatabase()
 	defer teardownTestDatabase()
 
@@ -84,7 +84,7 @@ func TestDatabaseCustomerCRUDServiceUpdate(t *testing.T) {
 	}
 }
 
-func TestDatabaseCustomerCRUDServiceDelete(t *testing.T) {
+func TestDatabaseCustomerCRUD_ServiceDelete(t *testing.T) {
 	setupTestDatabase()
 	defer teardownTestDatabase()
 

@@ -2,7 +2,7 @@ package rental
 
 import "testing"
 
-func TestCarRent(t *testing.T) {
+func TestCar_Rent(t *testing.T) {
 	t.Run("rent an available car", func(t *testing.T) {
 		car := Car{ID: 1, Make: "Toyota", Model: "Corolla", Year: 2015}
 		customer := Customer{ID: 1, Name: "John Doe"}
@@ -25,7 +25,7 @@ func TestCarRent(t *testing.T) {
 	})
 }
 
-func TestCarReturn(t *testing.T) {
+func TestCar_Return(t *testing.T) {
 	t.Run("return a rented car", func(t *testing.T) {
 		car := Car{ID: 1, Make: "Toyota", Model: "Corolla", Year: 2015}
 		customer := Customer{ID: 1, Name: "John Doe"}
@@ -47,7 +47,7 @@ func TestCarReturn(t *testing.T) {
 	})
 }
 
-func TestCarRented(t *testing.T) {
+func TestCar_Rented(t *testing.T) {
 	t.Run("check if a car is rented", func(t *testing.T) {
 		car := Car{ID: 1, Make: "Toyota", Model: "Corolla", Year: 2015}
 		customer := Customer{ID: 1, Name: "John Doe"}

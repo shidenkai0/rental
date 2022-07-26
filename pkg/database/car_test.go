@@ -10,7 +10,7 @@ import (
 	"gopkg.in/guregu/null.v4"
 )
 
-func TestDatabaseCarCRUDServiceGet(t *testing.T) {
+func TestDatabaseCarCRUDService_Get(t *testing.T) {
 	setupTestDatabase()
 	defer teardownTestDatabase()
 	db := sqlx.MustConnect("postgres", testDatabaseURL)
@@ -38,7 +38,7 @@ func TestDatabaseCarCRUDServiceGet(t *testing.T) {
 	})
 }
 
-func TestDatabaseCarCRUDServiceCreate(t *testing.T) {
+func TestDatabaseCarCRUDService_Create(t *testing.T) {
 	setupTestDatabase()
 	defer teardownTestDatabase()
 
@@ -59,7 +59,7 @@ func TestDatabaseCarCRUDServiceCreate(t *testing.T) {
 	}
 }
 
-func TestDatabaseCarCRUDServiceUpdate(t *testing.T) {
+func TestDatabaseCarCRUDService_Update(t *testing.T) {
 	setupTestDatabase()
 	defer teardownTestDatabase()
 
@@ -97,7 +97,7 @@ func TestDatabaseCarCRUDServiceUpdate(t *testing.T) {
 	}
 }
 
-func TestDatabaseCarCRUDServiceDelete(t *testing.T) {
+func TestDatabaseCarCRUDService_Delete(t *testing.T) {
 	setupTestDatabase()
 	defer teardownTestDatabase()
 
