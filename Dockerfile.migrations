@@ -1,0 +1,24 @@
+FROM ubuntu:22.04 as build
+
+ENV MIGRATE_RELEASE="https://github.com/golang-migrate/migrate/releases/download/v4.15.2/migrate.linux-amd64.tar.gz"
+
+# Install curl
+RUN apt-get update && apt-get install -y curl
+
+RUN mkdir /migrate
+RUN curl -L $MIGRATE_RELEASE -o /migrate/migrate.tar.gz
+RUN tar -xzf /migrate/migrate.tar.gz -C /migrate
+
+FROM debian:bullseye-slim
+
+COPY --from=build /migrate/migrate /usr/local/bin/migrate
+
+# Create user migrate and switch to it
+RUN useradd migrate
+USER migrate
+
+COPY --chown=migrate:migrate db/migrations/ /migrate/migrations
+
+WORKDIR /migrate
+
+ENTRYPOINT ["migrate", "-path", "migrations"]

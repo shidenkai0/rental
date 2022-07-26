@@ -31,7 +31,7 @@ jobs:
       with:
         token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-    - name: Build and Push image to DigitalOcean Container Registry
+    - name: Build and Push images to DigitalOcean Container Registry
       run: make all
     
     - name: Save DigitalOcean kubeconfig with short-lived credentials
