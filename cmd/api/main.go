@@ -9,6 +9,7 @@ import (
 	"github.com/jmoiron/sqlx"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	_ "github.com/lib/pq"
 	"github.com/shidenkai0/rental/pkg/api"
 	"github.com/shidenkai0/rental/pkg/api/gen"
 	"github.com/shidenkai0/rental/pkg/database"
