@@ -43,7 +43,7 @@ func (s *DatabaseCarCRUDService) Get(id int) (rental.Car, error) {
 
 // Update updates a car in the database.
 func (s *DatabaseCarCRUDService) Update(car rental.Car) error {
-	updateStatement := "UPDATE cars SET make = :make, model = :model, year = :year WHERE id = :id"
+	updateStatement := "UPDATE cars SET make = :make, model = :model, year = :year, customer_id = :customer_id WHERE id = :id"
 	_, err := sqlx.NamedExec(s.db, updateStatement, car)
 	return err
 }

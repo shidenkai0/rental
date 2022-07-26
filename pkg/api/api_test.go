@@ -131,8 +131,10 @@ func TestServerUpdateCar(t *testing.T) {
 	s := &Server{CarCRUDService: mock.NewMockCarCRUDService()}
 
 	testCarID := 1
+	rentedToID := 2
 
-	car := rental.Car{ID: testCarID, Make: "Toyota", Model: "Corolla", Year: 2015}
+	// set CustomerID to make sure CustomerID is kept as-is when updating
+	car := rental.Car{ID: testCarID, Make: "Toyota", CustomerID: null.NewInt(int64(rentedToID), true), Model: "Corolla", Year: 2015}
 	if _, err := s.CarCRUDService.Create(car); err != nil {
 		t.Errorf("got error %v, want nil", err)
 	}
@@ -157,7 +159,7 @@ func TestServerUpdateCar(t *testing.T) {
 		t.Errorf("got %d status code, want %d", resp.Code, http.StatusOK)
 	}
 
-	wantBody := `{"id":1,"make":"Honda","model":"Civic","renter_id":0,"year":2017}` + "\n"
+	wantBody := `{"id":1,"make":"Honda","model":"Civic","renter_id":2,"year":2017}` + "\n"
 	if resp.Body.String() != wantBody {
 		t.Errorf("got %s, want %s", resp.Body.String(), wantBody)
 	}
@@ -167,7 +169,7 @@ func TestServerUpdateCar(t *testing.T) {
 		t.Errorf("got error %v, want nil", err)
 	}
 
-	want := rental.Car{ID: testCarID, Make: updateCar.Make, Model: updateCar.Model, Year: updateCar.Year}
+	want := rental.Car{ID: testCarID, Make: updateCar.Make, Model: updateCar.Model, CustomerID: null.NewInt(int64(rentedToID), true), Year: updateCar.Year}
 	if got != want {
 		t.Errorf("got %v, want %v", got, want)
 	}

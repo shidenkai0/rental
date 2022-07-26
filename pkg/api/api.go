@@ -97,8 +97,24 @@ func (s *Server) UpdateCar(ctx echo.Context, carId int64) error {
 	if err := ctx.Bind(&CreateCar); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
-	car := rental.Car{ID: int(carId), Make: CreateCar.Make, Model: CreateCar.Model, Year: CreateCar.Year}
-	err := s.CarCRUDService.Update(car)
+	car, err := s.CarCRUDService.Get(int(carId))
+	if err == rental.ErrCarNotFound {
+		return echo.NewHTTPError(http.StatusNotFound, err.Error())
+	}
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
+	// Update only updatable fields, ie. not CustomerID
+	car = rental.Car{
+		ID:         car.ID,
+		Make:       CreateCar.Make,
+		CustomerID: car.CustomerID,
+		Model:      CreateCar.Model,
+		Year:       CreateCar.Year,
+	}
+
+	err = s.CarCRUDService.Update(car)
 	if err == rental.ErrCarNotFound {
 		return echo.NewHTTPError(http.StatusNotFound, err.Error())
 	}

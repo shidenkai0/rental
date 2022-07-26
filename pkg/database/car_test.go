@@ -7,6 +7,7 @@ import (
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 	"github.com/shidenkai0/rental/pkg/rental"
+	"gopkg.in/guregu/null.v4"
 )
 
 func TestDatabaseCarCRUDServiceGet(t *testing.T) {
@@ -63,14 +64,25 @@ func TestDatabaseCarCRUDServiceUpdate(t *testing.T) {
 	defer teardownTestDatabase()
 
 	db := sqlx.MustConnect("postgres", testDatabaseURL)
-	carCRUDService := NewDatabaseCarCRUDService(db)
-	car := rental.Car{ID: 1, Make: "Toyota", Model: "Corolla", Year: 2015}
-	_, err := carCRUDService.Create(car)
+
+	// Create test customers
+
+	customerCRUDService := NewDatabaseCustomerCRUDService(db)
+	testCustomer := rental.Customer{ID: 1, Name: "John Doe"}
+
+	_, err := customerCRUDService.Create(testCustomer)
 	if err != nil {
 		t.Errorf("got error %v, want nil", err)
 	}
 
-	car.Year = 2016
+	carCRUDService := NewDatabaseCarCRUDService(db)
+	car := rental.Car{ID: 1, Make: "Toyota", Model: "Corolla", Year: 2015}
+	_, err = carCRUDService.Create(car)
+	if err != nil {
+		t.Errorf("got error %v, want nil", err)
+	}
+
+	car = rental.Car{ID: 1, Make: "Ford", CustomerID: null.IntFrom(int64(testCustomer.ID)), Model: "Fiesta", Year: 2016}
 	err = carCRUDService.Update(car)
 	if err != nil {
 		t.Errorf("got error %v, want nil", err)
