@@ -1,8 +1,8 @@
-# Rental Service API
+# Rental Service API (showcase)
 
 ## Introduction
 
-Rental is an API for handling rental services. It allows the user to create, update, and delete cars, as well as customers. It also allows the user to rent and return cars.
+Rental is an API for handling car rental services. It is a showcase of an e2e implementation of a simple API in Golang, and is not intended to be useful or performant as is, but rather as an example of how to implement an API with Golang, from backend to infrastructure to documentation. It includes a simple Makefile, local run through docker-compose, API documentation (with codegen from the doc), infrastructure-as-code defined with Terraform, CI/CD deployments through Github Actions. It allows the user to create, update, and delete cars, as well as customers. It also allows the user to rent and return cars.
 
 ## API documentation
 
