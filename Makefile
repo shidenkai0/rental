@@ -65,7 +65,7 @@ seed_db: migrate
 
 migrate:
 	docker-compose up -d database
-	sleep 2 # wait for database to be ready, TODO: find a way to make this deterministic
+	sleep 2 # wait for database to be ready, TODO: find a way to make this deterministic (ie. use something like https://github.com/vishnubob/wait-for-it)
 	migrate -path db/migrations/ -database "postgres://rental:rental@localhost:5432/rental?sslmode=disable" up
 
 migrate_prod:
